@@ -2,7 +2,6 @@ services:
   adguard:
     image: adguard/adguardhome:v0.107.71
     container_name: adguard
-    # init: true — not used, manages its own signals
     restart: unless-stopped
     depends_on:
       - unbound
@@ -20,14 +19,12 @@ services:
         limits:
           cpus: "1.0"
           memory: 256M
-          pids: 200 # fork bomb protection
     networks:
       - adguard_net
 
   unbound:
     image: klutchell/unbound:1.24.2
     container_name: unbound
-    # init: true — not used, manages its own signals
     restart: unless-stopped
     volumes:
       - ./unbound:/etc/unbound/custom.conf.d:ro
@@ -36,7 +33,6 @@ services:
         limits:
           cpus: "0.5"
           memory: 128M
-          pids: 100 # fork bomb protection
     networks:
       - adguard_net
 
