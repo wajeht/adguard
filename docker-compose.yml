@@ -2,7 +2,7 @@ services:
   adguard:
     image: adguard/adguardhome:v0.107.71
     container_name: adguard
-    init: true # proper PID 1 signal handling and zombie reaping
+    # init: true — not used, manages its own signals
     restart: unless-stopped
     depends_on:
       - unbound
@@ -27,7 +27,7 @@ services:
   unbound:
     image: klutchell/unbound:1.24.2
     container_name: unbound
-    init: true # proper PID 1 signal handling and zombie reaping
+    # init: true — not used, manages its own signals
     restart: unless-stopped
     volumes:
       - ./unbound:/etc/unbound/custom.conf.d:ro
