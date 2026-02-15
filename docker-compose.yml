@@ -14,6 +14,11 @@ services:
     volumes:
       - ./data/work:/opt/adguardhome/work
       - ./data/conf:/opt/adguardhome/conf
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 256M
     networks:
       - adguard_net
 
@@ -23,6 +28,11 @@ services:
     restart: unless-stopped
     volumes:
       - ./unbound:/etc/unbound/custom.conf.d:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 128M
     networks:
       - adguard_net
 
