@@ -1,6 +1,6 @@
 services:
   adguard:
-    image: adguard/adguardhome:v0.107.71
+    image: adguard/adguardhome:v0.107.71@sha256:92929135ced2554aaf94706f766a98ad348f211df61b0704e2db7e8498cc00b7
     container_name: adguard
     restart: unless-stopped
     depends_on:
@@ -23,7 +23,7 @@ services:
       - adguard_net
 
   unbound:
-    image: klutchell/unbound:1.24.2
+    image: klutchell/unbound:1.24.2@sha256:cb9a0f06c803c764395e2ff50bd8a244470601290c78fb2cdcf1bd200a027cd6
     container_name: unbound
     restart: unless-stopped
     volumes:
