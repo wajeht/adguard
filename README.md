@@ -10,7 +10,7 @@ Clients → AdGuard (ad blocking) → Unbound (DoT) → Cloudflare
 
 ```bash
 scp .env pi@192.168.4.181:~/adguard/
-./install.sh install
+./setup.sh install
 ```
 
 Then open `http://SERVER_IP:3000`, set upstream DNS to `unbound`.
@@ -18,12 +18,12 @@ Then open `http://SERVER_IP:3000`, set upstream DNS to `unbound`.
 ## commands
 
 ```bash
-./install.sh install           # full setup
-./install.sh status            # containers + NFS
-./install.sh nfs mount         # mount NFS
-./install.sh nfs unmount       # unmount NFS
-./install.sh borgmatic-init    # init borg repo
-./install.sh borgmatic-backup  # manual backup
+./setup.sh install           # full setup
+./setup.sh status            # containers + NFS
+./setup.sh nfs mount         # mount NFS
+./setup.sh nfs unmount       # unmount NFS
+./setup.sh borgmatic-init    # init borg repo
+./setup.sh borgmatic-backup  # manual backup
 ```
 
 ## troubleshooting

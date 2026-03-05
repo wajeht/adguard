@@ -1,6 +1,6 @@
 #!/bin/bash
 # adguard management script
-# Usage: ./install.sh <command> [args]
+# Usage: ./setup.sh <command> [args]
 set -eo pipefail
 
 [ "$EUID" -eq 0 ] && {
@@ -121,6 +121,22 @@ cmd_install() {
 }
 
 #=============================================================================
+# UPDATE - Pull latest and redeploy
+#=============================================================================
+cmd_update() {
+	header "Updating AdGuard"
+	cd "$REPO_DIR"
+	info "Pulling latest..."
+	git pull
+	info "Pulling images..."
+	$SUDO docker compose pull
+	info "Redeploying..."
+	$SUDO docker compose up -d
+	header "Done"
+	cmd_status
+}
+
+#=============================================================================
 # BORGMATIC-INIT - Initialize borg repo
 #=============================================================================
 cmd_borgmatic_init() {
@@ -166,6 +182,9 @@ case "${1:-}" in
 install)
 	cmd_install
 	;;
+update)
+	cmd_update
+	;;
 setup)
 	cmd_setup
 	;;
@@ -189,6 +208,7 @@ status)
 	echo ""
 	echo -e "${BOLD}Commands:${NC}"
 	echo -e "  ${GREEN}install${NC}            Full setup: NFS, dirs, compose up, borgmatic init"
+	echo -e "  ${GREEN}update${NC}             Pull latest and redeploy"
 	echo -e "  ${GREEN}setup${NC}              Create data/backup directories"
 	echo -e "  ${GREEN}nfs mount${NC}          Mount NFS backup share"
 	echo -e "  ${GREEN}nfs unmount${NC}        Unmount NFS backup share"
