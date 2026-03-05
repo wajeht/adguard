@@ -21,6 +21,17 @@ services:
           memory: 256M
     networks:
       - adguard_net
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
 
   unbound:
     image: klutchell/unbound:1.24.2@sha256:cb9a0f06c803c764395e2ff50bd8a244470601290c78fb2cdcf1bd200a027cd6
@@ -35,6 +46,43 @@ services:
           memory: 128M
     networks:
       - adguard_net
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETGID
+      - SETUID
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+
+  adguard-borgmatic:
+    container_name: adguard-borgmatic
+    image: ghcr.io/borgmatic-collective/borgmatic:2.1.2@sha256:961533d6135fd67736e9fee0f7cebc4926b57840d4a210be0a0cf2de6b004996
+    env_file:
+      - .env
+    environment:
+      - TZ=America/Chicago
+    volumes:
+      - ./data:/source/data
+      - /home/pi/backup/adguard:/repository
+      - /home/pi/data/adguard/borgmatic:/borgmatic/state
+      - ./borgmatic-config.yml:/etc/borgmatic/config.yaml:ro
+      - ./borgmatic-crontab.txt:/etc/borgmatic.d/crontab.txt:ro
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    cap_add:
+      - DAC_READ_SEARCH
+      - FOWNER
+      - SETGID
+      - SETUID
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
 
 networks:
   adguard_net:

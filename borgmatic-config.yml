@@ -1,0 +1,22 @@
+source_directories:
+  - /source/data
+
+repositories:
+  - path: /repository
+    label: adguard
+
+archive_name_format: "adguard-{now:%Y-%m-%d-%H%M%S}"
+compression: zstd,3
+
+keep_daily: 7
+keep_weekly: 4
+keep_monthly: 6
+
+checks:
+  - name: repository
+    frequency: 1 week
+  - name: archives
+    frequency: 1 week
+
+check_last: 3
+

@@ -12,19 +12,22 @@ Clients → AdGuard (ad blocking) → Unbound (caching + DoT) → Cloudflare
 - **DNS caching** via Unbound
 - **Encrypted DNS** via DNS-over-TLS to Cloudflare
 - **Privacy** from ISP (they only see encrypted traffic)
+- **Automated backups** via borgmatic + borg (NFS to Synology NAS)
 
 ## Prerequisites
 
 - Docker & Docker Compose
-- Server with static IP on your LAN (ARM64 or x86_64)
+- Raspberry Pi 5 (or any ARM64/x86_64 server) with static LAN IP
+- NFS share for backups (optional)
 
-## Configuration
+## Install
 
-Update `Makefile` with your server details:
+```bash
+# Copy .env with BORG_PASSPHRASE to the server
+scp .env pi@192.168.4.181:~/adguard/
 
-```makefile
-SERVER = your_user@your_server_ip
-REMOTE_PATH = ~/adguard
+# Full setup (NFS mount, create dirs, compose up, borgmatic init)
+./install.sh install
 ```
 
 ### Ports Used
@@ -37,18 +40,6 @@ REMOTE_PATH = ~/adguard
 | 443  | AdGuard HTTPS |
 
 If port 53 conflicts with systemd-resolved, see Troubleshooting.
-
-## Deployment
-
-```bash
-# From local machine
-make deploy
-
-# SSH to server
-ssh user@server
-cd ~/adguard
-sudo make up
-```
 
 ## AdGuard Setup
 
@@ -93,17 +84,14 @@ Go to **Filters** → **DNS blocklists** → **Add blocklist**
 
 | Command | Description |
 |---------|-------------|
-| `make deploy` | Sync files to server (run locally) |
-| `make up` | Start containers |
-| `make down` | Stop containers |
-| `make restart` | Soft restart containers |
-| `make full-restart` | Down + up (resets Docker network) |
-| `make remote-restart` | Full restart on server via SSH |
-| `make remote-logs` | Tail server logs via SSH |
-| `make logs` | View logs |
-| `make status` | Check container status |
-| `make pull` | Pull latest images |
-| `make clean` | Remove containers and data |
+| `./install.sh install` | Full setup: NFS, dirs, compose up, borgmatic init |
+| `./install.sh setup` | Create data/backup directories |
+| `./install.sh nfs mount` | Mount NFS backup share |
+| `./install.sh nfs unmount` | Unmount NFS backup share |
+| `./install.sh nfs status` | Show NFS mount status |
+| `./install.sh borgmatic-init` | Initialize borg repo |
+| `./install.sh borgmatic-backup` | Run backup now |
+| `./install.sh status` | Show containers and mounts |
 
 ## Unbound: Recursive vs Forwarding Mode
 
@@ -156,12 +144,6 @@ To switch to recursive mode (if your network supports it), edit `unbound/custom.
 Check logs:
 ```bash
 sudo docker logs unbound
-```
-
-### Get Unbound IP
-
-```bash
-sudo docker inspect unbound --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
 ```
 
 ### AdGuard data directory permission errors
