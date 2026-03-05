@@ -19,6 +19,7 @@ Then open `http://SERVER_IP:3000`, set upstream DNS to `unbound`.
 
 ```bash
 ./setup.sh install           # full setup
+./setup.sh update            # pull latest + redeploy
 ./setup.sh status            # containers + NFS
 ./setup.sh nfs mount         # mount NFS
 ./setup.sh nfs unmount       # unmount NFS
