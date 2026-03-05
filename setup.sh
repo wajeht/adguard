@@ -137,6 +137,18 @@ cmd_update() {
 }
 
 #=============================================================================
+# RESTART - Down + up
+#=============================================================================
+cmd_restart() {
+	header "Restarting AdGuard"
+	cd "$REPO_DIR"
+	$SUDO docker compose down
+	$SUDO docker compose up -d
+	header "Done"
+	cmd_status
+}
+
+#=============================================================================
 # BORGMATIC-INIT - Initialize borg repo
 #=============================================================================
 cmd_borgmatic_init() {
@@ -185,6 +197,9 @@ install)
 update)
 	cmd_update
 	;;
+restart)
+	cmd_restart
+	;;
 setup)
 	cmd_setup
 	;;
@@ -209,6 +224,7 @@ status)
 	echo -e "${BOLD}Commands:${NC}"
 	echo -e "  ${GREEN}install${NC}            Full setup: NFS, dirs, compose up, borgmatic init"
 	echo -e "  ${GREEN}update${NC}             Pull latest and redeploy"
+	echo -e "  ${GREEN}restart${NC}            Down + up"
 	echo -e "  ${GREEN}setup${NC}              Create data/backup directories"
 	echo -e "  ${GREEN}nfs mount${NC}          Mount NFS backup share"
 	echo -e "  ${GREEN}nfs unmount${NC}        Unmount NFS backup share"
