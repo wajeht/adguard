@@ -34,7 +34,7 @@ services:
       - no-new-privileges:true
 
   unbound:
-    image: klutchell/unbound:1.24.2@sha256:cb9a0f06c803c764395e2ff50bd8a244470601290c78fb2cdcf1bd200a027cd6
+    image: klutchell/unbound:1.26.0@sha256:5020cfe1218aeda38777f88279220162e602c3a44efc684550dbf46137106a16
     container_name: unbound
     restart: unless-stopped
     volumes:
