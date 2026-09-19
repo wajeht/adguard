@@ -57,7 +57,7 @@ services:
 
   adguard-borgmatic:
     container_name: adguard-borgmatic
-    image: ghcr.io/borgmatic-collective/borgmatic:2.1.2@sha256:961533d6135fd67736e9fee0f7cebc4926b57840d4a210be0a0cf2de6b004996
+    image: ghcr.io/borgmatic-collective/borgmatic:2.1.8@sha256:5bd8439a648c26dd9f11fb4e3a54c6bd964babf4eabf5060bde8d58b51cdc0ee
     env_file:
       - .env
     environment:
